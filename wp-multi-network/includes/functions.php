@@ -891,14 +891,14 @@ if ( ! function_exists( 'move_site' ) ) :
 	function move_site( $site_id = 0, $new_network_id = 0 ) {
 		$site = get_site( $site_id );
 
+		// Bail if site does not exist.
+		if ( $site === null ) {
+			return new WP_Error( 'blog_not_exist', __( 'Site does not exist.', 'wp-multi-network' ) );
+		}
+
 		// Cast network IDs to ints.
 		$old_network_id = (int) $site->network_id;
 		$new_network_id = (int) $new_network_id;
-
-		// Bail if site does not exist.
-		if ( empty( $site ) ) {
-			return new WP_Error( 'blog_not_exist', __( 'Site does not exist.', 'wp-multi-network' ) );
-		}
 
 		// Bail if site is the main site.
 		if ( is_main_site( $site->id, $old_network_id ) ) {
