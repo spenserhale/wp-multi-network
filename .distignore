@@ -8,6 +8,7 @@
 .DS_Store
 .wordpress-org
 .github
+.wp-env.json
 tests
 composer.json
 composer.lock

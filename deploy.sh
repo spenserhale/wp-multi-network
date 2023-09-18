@@ -97,6 +97,7 @@ svn propset --quiet svn:ignore ".editorconfig
 .gitattributes
 .gitignore
 .travis.yml
+.wp-env.json
 composer.json
 composer.lock
 deploy.sh
