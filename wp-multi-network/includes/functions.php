@@ -586,7 +586,7 @@ if ( ! function_exists( 'add_network' ) ) :
 		 * @since 2.5.3
 		 */
 		do_action( 'added_network_blog', $new_blog_id, $new_network_id, $r );
-    
+
     // add new blog id as network meta data against the new network
 		$r['network_meta']['main_site'] = $new_blog_id;
 
@@ -889,8 +889,6 @@ if ( ! function_exists( 'move_site' ) ) :
 	 *                           or WP_Error on failure.
 	 */
 	function move_site( $site_id = 0, $new_network_id = 0 ) {
-		global $wpdb;
-
 		$site = get_site( $site_id );
 
 		// Cast network IDs to ints.
@@ -913,15 +911,9 @@ if ( ! function_exists( 'move_site' ) ) :
 		}
 
 		// Update the database entry.
-		$result = $wpdb->update( // phpcs:ignore WordPress.VIP.DirectDatabaseQuery.DirectQuery
-			$wpdb->blogs,
-			array(
-				'site_id' => $new_network_id,
-			),
-			array(
-				'blog_id' => $site->id,
-			)
-		);
+		$result = wp_update_site( $site->id, array(
+			'network_id' => $new_network_id,
+		) );
 
 		// Bail if error.
 		if ( empty( $result ) ) {
@@ -937,9 +929,6 @@ if ( ! function_exists( 'move_site' ) ) :
 		if ( 0 !== $new_network_id ) {
 			wp_update_network_counts( $new_network_id );
 		}
-
-		// Clean the blog cache.
-		clean_blog_cache( $site_id );
 
 		// Clean the network caches.
 		clean_network_cache(
